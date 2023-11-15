@@ -9,8 +9,10 @@ use Illuminate\View\View;
 class ShiftController extends Controller
 {
     /**
-     * Show all shifts.
-     */
+    * Show all shifts.
+    * @param string $id the text to do the magic
+    * @return View
+    **/
     public function index($id = null): View
     {
         $users = Shift::query()->join('Users', 'Users.id', 'Shifts.user_id')->select('Users.*')->distinct()->get();
@@ -21,7 +23,11 @@ class ShiftController extends Controller
         return view('index', compact('shifts', 'users', 'id'));
     }
 
-    /*// Show the shifts for a given user.
+    /**
+    * Show the shifts for a given user.
+    * @param string $id the text to do the magic
+    * @return dd
+    **/
     public function showUser(string $id)
     {
         // Retrieve all the shifts for the given user
@@ -29,7 +35,7 @@ class ShiftController extends Controller
         $user = User::find($id);
         // return view('index', ['shift' => $shifts, 'user'=> $user]);
         dd(['shift' => $shifts, 'username' => $user->name]);
-    }*/
+    }
     
     /**
      * Create a shift.

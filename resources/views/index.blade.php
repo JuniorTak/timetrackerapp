@@ -9,9 +9,6 @@
         .select, .is-info {
             margin: 0.3em;
         }
-        a.button {
-            margin: 0.1em;
-        }
         td.actions {
             text-align: center;
         }

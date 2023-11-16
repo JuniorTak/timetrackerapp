@@ -26,7 +26,7 @@
                     @endforeach
                 </select>
             </div>
-            <a class="button is-info" href="#">Show reports</a>
+            <a class="button is-info" href="{{ route('reports.show')}}">Show reports</a>
         </header>
         <div class="card-content">
             <div class="content">

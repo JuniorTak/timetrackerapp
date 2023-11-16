@@ -1,6 +1,8 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\ReportController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,15 +15,25 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+Route::get('/', function () {
+    return redirect('dashboard');
+});
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
     'verified'
 ])->group(function () {
-    Route::get('/', function () {
-    return view('dashboard');
-    })->name('home');
     Route::get('/dashboard', function () {
         return view('dashboard');
     })->name('dashboard');
+
+    // Time tracker routes
+    Route::get('/shifts', [ShiftController::class, 'index'])->name('shifts.index');
+    Route::get('user/{id}/shifts', [ShiftController::class, 'index'])->name('shifts.user');
+    Route::post('/shift', [ShiftController::class, 'create'])->name('shifts.create');
+    Route::get('/shift/{id}', [ShiftController::class, 'show'])->name('shifts.show');
+    Route::get('/shift/{id}/edit', [ShiftController::class, 'edit'])->name('shifts.edit');
+    Route::put('/shift/{id}/update', [ShiftController::class, 'update'])->name('shifts.update');
+    Route::get('/reports', [ReportController::class])->name('reports.show');
 });

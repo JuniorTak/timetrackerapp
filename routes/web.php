@@ -35,5 +35,5 @@ Route::middleware([
     Route::get('/shift/{id}', [ShiftController::class, 'show'])->name('shifts.show');
     Route::get('/shift/{id}/edit', [ShiftController::class, 'edit'])->name('shifts.edit');
     Route::put('/shift/{id}/update', [ShiftController::class, 'update'])->name('shifts.update');
-    Route::get('/reports', [ReportController::class])->name('reports.show');
+    Route::get('/reports', [ReportController::class, 'show'])->name('reports.show');
 });

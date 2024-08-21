@@ -14,7 +14,7 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        User::factory(3)->withPersonalTeam()->create();
+        User::factory(3)->create();
 
         $arraydt = array();
         $ids = [1, 2, 3];

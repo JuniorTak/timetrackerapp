@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html>
   <head>
     <meta charset="utf-8">
@@ -9,18 +9,16 @@
     @yield('css')
   </head>
   <body>
-    <x-app-layout>
-      <div class="py-12">
-          <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-              <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-                <main class="section">
-                  <div class="container">  
-                    @yield('content')
-                    </div>
-                  </main>
-              </div>
-          </div>
+    <div class="py-12">
+      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
+          <main class="section">
+            <div class="container">  
+              @yield('content')
+            </div>
+          </main>
+        </div>
       </div>
-    </x-app-layout>  
+    </div>
   </body>
 </html>

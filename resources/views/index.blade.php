@@ -1,4 +1,7 @@
 @extends('template')
+@section('title')
+Shifts
+@endsection('title')
 @section('css')
     <style>
         .card-footer {
@@ -20,7 +23,7 @@
             <p class="card-header-title">Shifts</p>
             <div class="select">
                 <select onchange="window.location.href = this.value">
-                    <option value="{{ route('shifts.index') }}" @unless($id) selected @endunless>Tous les utilisateurs</option>
+                    <option value="{{ route('shifts.index') }}" @unless($id) selected @endunless>All users</option>
                     @foreach($users as $user)
                         <option value="{{ route('shifts.user', $user->id) }}" {{ $id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
                     @endforeach
@@ -50,9 +53,9 @@
                                 <td>{{ $shift->time_out }}</td>
                                 <td>{{ $shift->user->name }}</td>
                                 <td class='actions'>
-                                    <a class="button is-primary" href="{{ route('shifts.show', $shift->id) }}">Voir</a>
-                                    <a class="button is-warning" href="{{ route('shifts.edit', $shift->id) }}">Modifier</a>
-                                    <a class="button is-danger" href="#">Supprimer</a>
+                                    <a class="button is-primary" href="{{ route('shifts.show', $shift->id) }}">Show</a>
+                                    <a class="button is-warning" href="{{ route('shifts.edit', $shift->id) }}">Edit</a>
+                                    <a class="button is-danger" href="#">Delete</a>
                                 </td>
                             </tr>
                         @endforeach

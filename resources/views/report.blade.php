@@ -1,4 +1,7 @@
 @extends('template')
+@section('title')
+Reports
+@endsection('title')
 @section('css')
     <style>
         .card-footer {

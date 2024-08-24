@@ -9,12 +9,23 @@ Reports
             align-items: center;
             padding: 0.4em;
         }
+        .select, .is-info {
+            margin: 0.3em;
+        }
     </style>
 @endsection
 @section('content')
     <div class="card">
         <header class="card-header">
             <p class="card-header-title">Reports</p>
+            <div class="select">
+                <select onchange="window.location.href = this.value">
+                    <option value="{{ route('reports.index') }}" @unless($id) selected @endunless>All users</option>
+                    @foreach($users as $user)
+                        <option value="{{ route('reports.user', $user->id) }}" {{ $id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                    @endforeach
+                </select>
+            </div>
         </header>
         <div class="card-content">
             <div class="content">

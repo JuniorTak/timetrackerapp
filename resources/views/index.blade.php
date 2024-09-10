@@ -29,7 +29,7 @@ Shifts
                     @endforeach
                 </select>
             </div>
-            <a class="button is-info" href="{{ route('reports.show')}}">Show reports</a>
+            <a class="button is-info" href="{{ $id ? route('reports.user', $id) : route('reports.index') }}">Show reports</a>
         </header>
         <div class="card-content">
             <div class="content">

@@ -12,7 +12,7 @@ use Illuminate\Http\RedirectResponse;
 use App\Providers\RouteServiceProvider;
 use Illuminate\View\View;
 
-class RegisteredAdminController extends Controller
+class RegisterAdminController extends Controller
 {
     /**
      * Display the admin registration view.

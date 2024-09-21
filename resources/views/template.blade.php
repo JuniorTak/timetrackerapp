@@ -1,35 +1,29 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+<x-app-layout>
+  <x-slot name="title">
     <title>TimeTrackerApp - @yield('title')</title>
+  </x-slot>
+
+  <x-slot name="head">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css">
     <link rel="stylesheet" href="{{ URL::asset('css/style.css') }}" />
-    <link rel="icon" href="{{ URL::asset('favicon.ico') }}" />
     @yield('css')
-  </head>
-  <body>
-    <nav>
-      <ul>
-        <li>
-        	<a href="{{ url('/') }}" title="Goto homepage">Home</a>
-        </li>
-        <li>
-        	<a href="{{ route('shifts.index') }}" title="View all shifts">Shifts</a>
-        </li>
-      </ul>
-    </nav>
-    <div class="py-12">
-      <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-        <div class="bg-white dark:bg-gray-800 overflow-hidden shadow-xl sm:rounded-lg">
-          <main class="section">
-            <div class="container">  
-              @yield('content')
-            </div>
-          </main>
+  </x-slot>
+
+  <x-slot name="header">
+    <h2 class="font-semibold text-xl text-gray-800 leading-tight">
+        @yield('header')
+    </h2>
+  </x-slot>
+  
+  <div class="py-12">
+    <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+      <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg">
+        <div class="section">
+          <div class="container">  
+            @yield('content')
+          </div>
         </div>
       </div>
     </div>
-  </body>
-</html>
+  </div>
+</x-app-layout>

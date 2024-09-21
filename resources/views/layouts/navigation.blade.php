@@ -15,6 +15,11 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+                    @if (Auth::user()->is_admin != 0)
+                        <x-nav-link :href="route('shifts.index')" :active="request()->routeIs('shifts.index')" title="View all shifts">
+                            {{ __('Shifts') }}
+                        </x-nav-link>
+                    @endif
                 </div>
             </div>
 
@@ -34,6 +39,12 @@
                     </x-slot>
 
                     <x-slot name="content">
+                        @if (Auth::user()->is_admin != 0)
+                            <x-dropdown-link :href="route('register-user')">
+                                {{ __('Register User') }}
+                            </x-dropdown-link>
+                        @endif
+                        
                         <x-dropdown-link :href="route('profile.edit')">
                             {{ __('Profile') }}
                         </x-dropdown-link>
@@ -70,6 +81,11 @@
             <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+            @if (Auth::user()->is_admin != 0)
+                <x-responsive-nav-link :href="route('shifts.index')" :active="request()->routeIs('shifts.index')" title="View all shifts">
+                    {{ __('Shifts') }}
+                </x-responsive-nav-link>
+            @endif
         </div>
 
         <!-- Responsive Settings Options -->
@@ -80,6 +96,12 @@
             </div>
 
             <div class="mt-3 space-y-1">
+                @if (Auth::user()->is_admin != 0)
+                    <x-responsive-nav-link :href="route('register-user')">
+                        {{ __('Register User') }}
+                    </x-responsive-nav-link>
+                @endif
+
                 <x-responsive-nav-link :href="route('profile.edit')">
                     {{ __('Profile') }}
                 </x-responsive-nav-link>

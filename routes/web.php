@@ -19,7 +19,7 @@ use App\Http\Controllers\RegisterUserController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('home');
 })->middleware('no.admin');
 
 Route::get('/dashboard', function () {

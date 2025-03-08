@@ -11,6 +11,9 @@ class Shift extends Model
 {
     use HasFactory;
 
+    // Add the fillable attributes for mass assignment.
+    protected $fillable = ['user_id', 'the_date', 'time_in', 'time_out'];
+
     public function user(): BelongsTo
     { 
         return $this->belongsTo(User::class); 

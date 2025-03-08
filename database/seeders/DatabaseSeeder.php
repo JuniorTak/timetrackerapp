@@ -22,8 +22,11 @@ class DatabaseSeeder extends Seeder
 
         $arraydt = [];
 
-        for ($i = 1; $i <= 31; $i++)
-            array_push($arraydt, Carbon::createFromDate(2023, 8, $i));
+        for ($i = 1; $i <= 30; $i++) {
+            $arraydt[] = Carbon::today()->subDays($i)->toDateString();
+            // Array of last 30 days from 1 day ago.
+            $arraydt = array_reverse($arraydt);
+        }
 
         $non_admin_users = User::where('is_admin', false)->get();
 

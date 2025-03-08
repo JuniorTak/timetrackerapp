@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('snoozes', function (Blueprint $table) {
             $table->id();
             $table->time('snooze_on');
-            $table->time('snooze_off');
+            $table->time('snooze_off')->nullable();
             $table->timestamps();
             $table->foreignId('shift_id')
             ->constrained()

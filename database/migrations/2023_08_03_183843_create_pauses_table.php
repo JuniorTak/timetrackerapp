@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('pauses', function (Blueprint $table) {
             $table->id();
             $table->time('pause_on');
-            $table->time('pause_off');
+            $table->time('pause_off')->nullable();
             $table->timestamps();
             $table->foreignId('shift_id')
             ->constrained()

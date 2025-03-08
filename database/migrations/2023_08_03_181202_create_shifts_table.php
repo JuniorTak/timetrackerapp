@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->date('the_date');
             $table->time('time_in');
-            $table->time('time_out');
+            $table->time('time_out')->nullable();
             $table->timestamps();
             $table->foreignId('user_id')
             ->constrained()

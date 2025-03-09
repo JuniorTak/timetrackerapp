@@ -4,6 +4,9 @@ Reports
 @endsection('title')
 @section('css')
     <style>
+        html {
+            scroll-behavior: smooth;
+        }
         .card-footer {
             justify-content: center;
             align-items: center;
@@ -41,6 +44,9 @@ Reports
                         </div>
                     </div>
                 </form>
+                <div class="is-flex is-align-items-center ml-2 mr-6">
+                    <a href="#chart" class="button is-info is-outlined has-text-weight-semibold">View Chart 📊</a>
+                </div>
                 <div class="is-flex is-align-items-center gap-2 ml-2">
                     <label for="selected-user" class="is-flex is-align-items-center">For</label>
                     <div class="select">
@@ -90,9 +96,75 @@ Reports
                 {{ $paginatedActivityTimes->withPath(url()->current())->withQueryString()->links() }}
             </footer>
         </div>
+        <div class="card mt-6">
+            <div class="card-header">
+                <p id="chart" class="card-header-title">Activity time chart</p>
+            </div>
+            <div class="card-content">
+                <div class="content">
+                    <canvas id="workTimeChart"></canvas>
+                </div>
+            </div>
+        </div>
     @else
         <div class="p-6 text-gray-900">
             {{ __("No data to show.") }}
         </div>
     @endif
+    <!-- Include Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    @php
+    $chartData = [];
+
+    if($id) {
+        // Compute total activity time for a single user.
+        $sum = 0;
+        foreach ($activityTimes as $activityTime) {
+            if ($activityTime['user_id'] == $id) {
+                $carbonTime = \Carbon\Carbon::createFromFormat('H:i:s', $activityTime['active_time']);
+                $totalHours = $carbonTime->hour + ($carbonTime->minute / 60) + ($carbonTime->second / 3600);
+                $sum += $totalHours;
+            }
+        }
+        $chartData = [$sum];
+    } else {
+        // Compute total activity time for all.
+        $chartData = $users->map(function ($user) use ($activityTimes) {
+            $sum = 0;
+            foreach ($activityTimes as $activityTime) {
+                if ($activityTime['user_id'] == $user->id) {
+                    $carbonTime = \Carbon\Carbon::createFromFormat('H:i:s', $activityTime['active_time']);
+                    $totalHours = $carbonTime->hour + ($carbonTime->minute / 60) + ($carbonTime->second / 3600);
+                    $sum += $totalHours;
+                }
+            }
+            return $sum;
+        })->toArray();
+    }
+    @endphp
+    <script>
+        const ctx = document.getElementById('workTimeChart').getContext("2d");
+        const workTimeChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: @json($id ? [$users->pluck('name', 'id')->get($id)] : $users->pluck('name')),
+                datasets: [{
+                    label: 'Total activity time (in hours)',
+                    data: @json($chartData),
+                    backgroundColor: 'rgba(75, 192, 192, 1)',
+                    borderColor: 'rgba(75, 192, 192, 1)',
+                    borderWidth: 1,
+                    maxBarThickness: 300
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            }
+        });
+    </script>
 @endsection

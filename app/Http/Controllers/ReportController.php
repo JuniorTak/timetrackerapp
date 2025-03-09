@@ -15,16 +15,26 @@ class ReportController extends Controller
     * @param string $id the text to do the magic
     * @return View
     */
-    public function index($id = null) : View
+    public function index(Request $request, $id = null) : View
     {
-        $users = Shift::query()->join('Users', 'Users.id', 'Shifts.user_id')->select('Users.*')->distinct()->get();
+        // If a specific time range is requested, filter the shifts.
+        $startDate = $request->input('start_date') ?? Shift::query()->min('the_date');
+        $endDate = $request->input('end_date') ?? Shift::query()->max('the_date');
+
+        // Fetch users with shifts in the given range.
+        $users = Shift::query()
+                        ->whereBetween('the_date', [$startDate, $endDate])
+                        ->join('Users', 'Users.id', 'Shifts.user_id')
+                        ->select('Users.*')->distinct()->get();
+
         $activityTimes = [];
         
         // Computation of the working activity time.
         $user_s = $id ? User::whereId($id)->get() : $users;
         foreach($user_s as $user)
         {
-            $shifts = Shift::where('user_id', $user->id)->get();
+            // Fetch the user shifts.
+            $shifts = Shift::where('user_id', $user->id)->whereBetween('the_date', [$startDate, $endDate])->get();
             foreach($shifts as $shift)
             {
                 $pausequery = Pause::where('shift_id', $shift->id);
@@ -69,7 +79,14 @@ class ReportController extends Controller
 
         $paginatedActivityTimes = $this->paginate($activityTimes);
 
-        return view('report', compact('paginatedActivityTimes', 'users', 'id'));
+        return view('report', compact(
+                    'paginatedActivityTimes',
+                    'activityTimes',
+                    'startDate',
+                    'endDate',
+                    'users',
+                    'id'
+                ));
     }
 
     /**

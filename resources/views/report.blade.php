@@ -1,89 +1,72 @@
 @extends('template')
+
 @section('title')
 Reports
 @endsection('title')
-@section('css')
-    <style>
-        html {
-            scroll-behavior: smooth;
-        }
-        .card-footer {
-            justify-content: center;
-            align-items: center;
-            padding: 0.4em;
-        }
-        .is-margin-left-negative {
-            margin-left: -1em;
-        }
-        .select, .is-info {
-            margin: 0.3em;
-        }
-    </style>
-@endsection
+
 @section('header')
 Reports
 @endsection('header')
+
 @section('content')
     @if (count($paginatedActivityTimes) > 0)
-        <div class="card">
-            <div class="card-header is-flex flex-wrap">
-                <p class="card-header-title">Reports</p>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden">
+            <div class="flex flex-wrap items-center justify-between px-4 py-3 border-b">
+                <p class="text-lg font-semibold">Reports</p>
                 <!-- Filter form -->
-                <form method="GET" action="{{ url()->current() }}" class="">
-                    <div class="columns gap-6">
-                        <div class="column is-one-third is-flex is-align-items-center gap-2">
+                <form method="GET" action="{{ url()->current() }}" class="max-w-xl m-2">
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center gap-2">
                             <label for="start_date">From</label>
                             <input type="date" id="start_date" name="start_date" value="{{ $startDate }}">
                         </div>
-                        <div class="column is-one-third is-flex is-align-items-center gap-2">
+                        <div class="flex items-center gap-2">
                             <label for="end_date">To</label>
                             <input type="date" id="end_date" name="end_date" value="{{ $endDate }}">
                         </div>
-                        <div class="column is-one-third is-flex is-align-items-center is-margin-left-negative">
-                            <button type="submit" class="button is-info">Filtrer</button>
+                        <div class="flex items-center">
+                            <button type="submit" class="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded">Filtrer</button>
                         </div>
                     </div>
                 </form>
-                <div class="is-flex is-align-items-center ml-2 mr-6">
-                    <a href="#chart" class="button is-info is-outlined has-text-weight-semibold">View Chart 📊</a>
+                <div class="flex items-center m-2">
+                    <a href="#chart" class="border border-blue-500 text-blue-500 hover:bg-blue-100 font-semibold px-4 py-2 rounded">View Chart 📊</a>
                 </div>
-                <div class="is-flex is-align-items-center gap-2 ml-2">
-                    <label for="selected-user" class="is-flex is-align-items-center">For</label>
-                    <div class="select">
-                        <select id="selected-user" class="form-select has-text-weight-semibold" onchange="window.location.href = this.value">
-                            @php
-                            $queryParams = request()->query();
-                            // Remove pagination-related parameters.
-                            unset($queryParams['page'], $queryParams['per_page']);
-                            @endphp
-                            <option value="{{ route('reports.index', $queryParams) }}" @unless($id) selected @endunless>All users</option>
-                            @foreach($users as $user)
-                                <option value="{{ route('reports.user', array_merge(['id' => $user->id], $queryParams)) }}" {{ $id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                <div class="flex items-center gap-2 m-2">
+                    <label for="selected-user">For</label>
+                    <select id="selected-user" class="border rounded py-1 font-semibold" onchange="window.location.href = this.value">
+                        @php
+                        $queryParams = request()->query();
+                        // Remove pagination-related parameters.
+                        unset($queryParams['page'], $queryParams['per_page']);
+                        @endphp
+                        <option value="{{ route('reports.index', $queryParams) }}" @unless($id) selected @endunless>All users</option>
+                        @foreach($users as $user)
+                            <option value="{{ route('reports.user', array_merge(['id' => $user->id], $queryParams)) }}" {{ $id == $user->id ? 'selected' : '' }}>{{ $user->name }}</option>
+                        @endforeach
+                    </select>
                 </div>
             </div>
-            <div class="card-content">
-                <div class="content">
-                    <table class="table is-hoverable">
+            <div class="p-4">
+                <div class="overflow-x-auto">
+                    <table class="w-full border-collapse border border-gray-200">
                         <thead>
-                            <tr>
-                                <th>Date of shift</th>
-                                @if(!$id)<th> User name</th>@endif
-                                <th>Active time</th>
-                                <th></th>
+                            <tr class="bg-gray-100 text-left">
+                                <th class="border px-4 py-2">Date of shift</th>
+                                @if(!$id)<th class="border px-4 py-2"> User name</th>@endif
+                                <th class="border px-4 py-2">Active time</th>
+                                <th class="border px-4 py-2"></th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach($paginatedActivityTimes as $activityTime)
-                                <tr>
-                                    <td>{{ $activityTime['shift_date'] }}</td>
-                                    @if(!$id)<td>{{ $activityTime['user_name'] }}</td>@endif
-                                    <td>{{ $activityTime['active_time'] }}</td>
-                                    <td class='actions is-flex is-justify-content-center'>
-                                        <a class="button is-link is-outlined" href="#">
-                                            <span class="icon mx-2">👁️‍🗨️</span>
+                                <tr class="hover:bg-gray-50">
+                                    <td class="border px-4 py-2">{{ $activityTime['shift_date'] }}</td>
+                                    @if(!$id)<td class="border px-4 py-2">{{ $activityTime['user_name'] }}</td>@endif
+                                    <td class="border px-4 py-2">{{ $activityTime['active_time'] }}</td>
+                                    <td class="border px-4 py-2 flex justify-center">
+                                        <a class="border border-blue-500 text-blue-500 hover:bg-blue-100 px-3 py-1 rounded" href="#">
+                                            <span class="mx-2">👁️‍🗨️</span>
                                         </a>
                                     </td>
                                 </tr>
@@ -92,15 +75,15 @@ Reports
                     </table>
                 </div>
             </div>
-            <footer class="card-footer">
+            <footer class="flex items-center justify-center px-4 py-3 border-t text-gray-700">
                 {{ $paginatedActivityTimes->withPath(url()->current())->withQueryString()->links() }}
             </footer>
         </div>
-        <div class="card mt-6">
-            <div class="card-header">
-                <p id="chart" class="card-header-title">Activity time chart</p>
+        <div class="bg-white shadow-lg rounded-lg overflow-hidden mt-6">
+            <div class="px-4 py-3 border-b">
+                <p id="chart" class="text-lg font-semibold">Activity time chart</p>
             </div>
-            <div class="card-content">
+            <div class="p-4">
                 <div class="content">
                     <canvas id="workTimeChart"></canvas>
                 </div>

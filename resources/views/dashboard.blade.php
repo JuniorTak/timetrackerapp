@@ -68,5 +68,8 @@
                 </div>
             </div>
         </div>
+
+        <!-- time-tracking.js -->
+        <script src="{{ asset('js/time-tracking.js') }}"></script>
     @endif
 </x-app-layout>

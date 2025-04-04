@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\{Shift, User};
 use Illuminate\View\View;
+use Carbon\Carbon;
 
 class ShiftController extends Controller
 {
@@ -42,7 +43,28 @@ class ShiftController extends Controller
      */
     public function create(Request $request)
     {
-        // For shift start
+        $userId = auth()->id();
+        $today = Carbon::today()->toDateString();
+
+        // Check if the user already has a shift for today
+        $existingShift = Shift::where('user_id', $userId)->whereDate('the_date', $today)->first();
+
+        if ($existingShift) {
+            return response()->json(['error' => 'You have already clocked in today.'], 400);
+        }
+
+        // Start shift.
+        $shift = Shift::create([
+            'user_id' => $userId,
+            'the_date' => $today,
+            'time_in' => Carbon::now()->toTimeString(),
+            'time_out' => null
+        ]);
+
+        return response()->json([
+            'message' => 'Time in recorded',
+            'shift' => $shift,
+        ]);
     }
     
     /**
@@ -70,7 +92,14 @@ class ShiftController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        // For break on/off, snooze on/off and shift end
+        // End shift.
+        $shift = Shift::findOrFail($id);
+        $shift->update(['time_out' => Carbon::now()->toTimeString()]);
+
+        return response()->json([
+            'message' => 'Time out recorded',
+            'shift' => $shift
+        ]);
     }
 
 }

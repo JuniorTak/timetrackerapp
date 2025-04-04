@@ -102,4 +102,29 @@ class ShiftController extends Controller
         ]);
     }
 
+    /**
+     * Get the current shift with pauses and snoozes for state persistance and shift history.
+     */
+    public function getCurrentShift()
+    {
+        $userId = auth()->id();
+
+        // Get the latest shift for the logged-in user
+        $shift = Shift::where('user_id', $userId)
+                    ->whereDate('the_date', Carbon::today()->toDateString())
+                    ->with(['pauses', 'snoozes'])
+                    ->latest()
+                    ->first();
+
+        if (!$shift) {
+            return response()->json(['message' => 'No active shift found.'], 404);
+        }
+
+        return response()->json([
+            'shift' => $shift,
+            'pauses' => $shift->pauses,
+            'snoozes' => $shift->snoozes
+        ]);
+    }
+
 }

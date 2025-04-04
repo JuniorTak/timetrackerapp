@@ -94,8 +94,7 @@ Reports
             {{ __("No data to show.") }}
         </div>
     @endif
-    <!-- Include Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
     @php
     $chartData = [];
 
@@ -125,7 +124,7 @@ Reports
         })->toArray();
     }
     @endphp
-    <script>
+    <script type="module">
         const ctx = document.getElementById('workTimeChart').getContext("2d");
         const workTimeChart = new Chart(ctx, {
             type: 'bar',

@@ -3,6 +3,8 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ShiftController;
+use App\Http\Controllers\PauseController;
+use App\Http\Controllers\SnoozeController;
 use App\Http\Controllers\ReportController;
 use App\Http\Controllers\RegisterAdminController;
 use App\Http\Controllers\RegisterUserController;
@@ -43,13 +45,13 @@ Route::middleware(['guest', 'check.admin'])->group(function () {
 // Authenticated Routes for Verified Admin and User.
 Route::middleware('auth', 'verified')->group(function () {
     Route::post('/shift', [ShiftController::class, 'create'])->name('shifts.create');
-    Route::put('/shift/{id}/update', [ShiftController::class, 'update'])->name('shifts.update');
+    Route::patch('/shift/{id}/update', [ShiftController::class, 'update'])->name('shifts.update');
     // Pauses routes
-    Route::post('/pause', [PauseController::class, 'create'])->name('pauses.create');
-    Route::put('/pause/{id}/update', [PauseController::class, 'update'])->name('pauses.update');
+    Route::post('/pause/shift/{shiftId}', [PauseController::class, 'create'])->name('pauses.create');
+    Route::patch('/pause/{id}/update', [PauseController::class, 'update'])->name('pauses.update');
     // Snoozes routes
-    Route::post('/snooze', [SnoozeController::class, 'create'])->name('snoozes.create');
-    Route::put('/snooze/{id}/update', [SnoozeController::class, 'update'])->name('snoozes.update');
+    Route::post('/snooze/shift/{shiftId}', [SnoozeController::class, 'create'])->name('snoozes.create');
+    Route::patch('/snooze/{id}/update', [SnoozeController::class, 'update'])->name('snoozes.update');
     
     // User Registration and Admin Only Routes.
     Route::middleware('is.admin')->group(function () {

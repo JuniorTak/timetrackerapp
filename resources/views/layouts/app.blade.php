@@ -25,6 +25,10 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @if(!auth()->user()->is_admin)
+            <!-- multitab-restriction.js -->
+            <script src="{{ asset('js/multitab-restriction.js') }}"></script>
+        @endif
     </head>
     <body class="font-sans antialiased">
         <div class="min-h-screen bg-gray-100">

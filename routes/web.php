@@ -46,6 +46,7 @@ Route::middleware(['guest', 'check.admin'])->group(function () {
 Route::middleware('auth', 'verified')->group(function () {
     Route::post('/shift', [ShiftController::class, 'create'])->name('shifts.create');
     Route::patch('/shift/{id}/update', [ShiftController::class, 'update'])->name('shifts.update');
+    Route::get('/current-shift', [ShiftController::class, 'getCurrentShift']);
     // Pauses routes
     Route::post('/pause/shift/{shiftId}', [PauseController::class, 'create'])->name('pauses.create');
     Route::patch('/pause/{id}/update', [PauseController::class, 'update'])->name('pauses.update');

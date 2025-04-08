@@ -18,7 +18,7 @@ class ShiftController extends Controller
     {
         $users = Shift::query()->join('Users', 'Users.id', 'Shifts.user_id')->select('Users.*')->distinct()->get();
 
-        $query = $id ? User::whereId($id)->firstOrFail()->shifts() : Shift::query();
+        $query = $id ? User::whereId($id)->firstOrFail()->shifts()->latest() : Shift::query()->latest();
         $shifts = $query->paginate(10);
 
         return view('index', compact('shifts', 'users', 'id'));

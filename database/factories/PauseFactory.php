@@ -18,10 +18,10 @@ class PauseFactory extends Factory
     public function definition(): array
     {
         $dtstart = Carbon::createFromTimeString('11:30:00')->addMinutes(rand(0,30))->addSeconds(rand(0,59));
-        $dtend = Carbon::createFromTimeString($dtstart)->addMinutes(rand(0,44))->addSeconds(rand(0,59));
+        $dtend = (clone $dtstart)->addMinutes(rand(0,44))->addSeconds(rand(0,59));
         return [
-            'pause_on' => $dtstart,
-            'pause_off' => $dtend,
+            'pause_on' => $dtstart->format('H:i:s'),
+            'pause_off' => $dtend->format('H:i:s'),
         ];
     }
 }

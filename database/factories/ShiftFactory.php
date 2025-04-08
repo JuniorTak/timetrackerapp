@@ -18,10 +18,10 @@ class ShiftFactory extends Factory
     public function definition(): array
     {
         $dtstart = Carbon::createFromTimeString('08:00:00')->addMinutes(rand(0,59))->addSeconds(rand(0,59));
-        $dtend = Carbon::createFromTimeString($dtstart)->addHours(rand(7,9))->addMinutes(rand(0,59))->addSeconds(rand(0,59));
+        $dtend = (clone $dtstart)->addHours(rand(7,9))->addMinutes(rand(0,59))->addSeconds(rand(0,59));
         return [
-            'time_in' => $dtstart,
-            'time_out' => $dtend,
+            'time_in' => $dtstart->format('H:i:s'),
+            'time_out' => $dtend->format('H:i:s'),
         ];
     }
 }

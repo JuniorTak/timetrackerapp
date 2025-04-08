@@ -18,10 +18,10 @@ class SnoozeFactory extends Factory
     public function definition(): array
     {
         $dtstart = Carbon::createFromTimeString('12:45:59')->addMinutes(rand(0,14))->addSeconds(rand(0,59));
-        $dtend = Carbon::createFromTimeString($dtstart)->addMinutes(rand(0,60));
+        $dtend = (clone $dtstart)->addMinutes(rand(0,60));
         return [
-            'snooze_on' => $dtstart,
-            'snooze_off' => $dtend,
+            'snooze_on' => $dtstart->format('H:i:s'),
+            'snooze_off' => $dtend->format('H:i:s'),
         ];
     }
 }

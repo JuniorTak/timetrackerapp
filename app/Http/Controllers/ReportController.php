@@ -27,54 +27,56 @@ class ReportController extends Controller
                         ->join('Users', 'Users.id', 'Shifts.user_id')
                         ->select('Users.*')->distinct()->get();
 
-        $activityTimes = [];
-        
         // Computation of the working activity time.
-        $user_s = $id ? User::whereId($id)->get() : $users;
-        foreach($user_s as $user)
+        $activityTimes = [];
+
+        // In the given range, fetch shifts of a given user or all shifts.
+        $query = $id ? Shift::where('user_id', $id) : Shift::query();
+        $shifts = $query->whereBetween('the_date', [$startDate, $endDate])
+                        ->join('Users', 'Users.id', 'Shifts.user_id')
+                        ->select('Shifts.*', 'Users.name')
+                        ->orderByDesc('Shifts.created_at')->get();
+        
+        // Fetch the user shifts.
+        foreach($shifts as $shift)
         {
-            // Fetch the user shifts.
-            $shifts = Shift::where('user_id', $user->id)->whereBetween('the_date', [$startDate, $endDate])->get();
-            foreach($shifts as $shift)
-            {
-                $pausequery = Pause::where('shift_id', $shift->id);
-                $snoozequery = Snooze::where('shift_id', $shift->id);
+            $pausequery = Pause::where('shift_id', $shift->id);
+            $snoozequery = Snooze::where('shift_id', $shift->id);
 
-                // Initialize total break time and total snooze time to zero.
-                $pauseTimeInSec = 0;
-                $snoozeTimeInSec = 0;
+            // Initialize total break time and total snooze time to zero.
+            $pauseTimeInSec = 0;
+            $snoozeTimeInSec = 0;
 
-                if ($pausequery->exists())
-                {   
-                    $pauses = $pausequery->get();
-                    foreach ($pauses as $pause)
-                        $pauseTimeInSec += Carbon::parse($pause->pause_off)->secondsSinceMidnight() - Carbon::parse($pause->pause_on)->secondsSinceMidnight();
-                }
-
-                if ($snoozequery->exists())
-                {
-                    $snoozes = $snoozequery->get();
-                    foreach ($snoozes as $snooze)
-                        $snoozeTimeInSec += Carbon::parse($snooze->snooze_off)->secondsSinceMidnight() - Carbon::parse($snooze->snooze_on)->secondsSinceMidnight();
-                }
-
-                $activityTimeInSec = Carbon::parse($shift->time_out)->secondsSinceMidnight() - Carbon::parse($shift->time_in)->secondsSinceMidnight();
-                
-                //Check if the total break time is greater than 30 min.
-                if ($pauseTimeInSec > 1800)
-                    $activityTimeInSec -= $pauseTimeInSec;
-
-                // Check if the total snooze time is greater than 30 min.
-                if ($snoozeTimeInSec > 1800)
-                    $activityTimeInSec -= $snoozeTimeInSec;
-                
-                array_push($activityTimes, [
-                    'user_id' => $user->id,
-                    'user_name' => $user->name,
-                    'shift_date' => $shift->the_date,
-                    'active_time' => gmdate('H:i:s', $activityTimeInSec) // $activityTimeInSec->format('H:i:s');
-                ]);
+            if ($pausequery->exists())
+            {   
+                $pauses = $pausequery->get();
+                foreach ($pauses as $pause)
+                    $pauseTimeInSec += Carbon::parse($pause->pause_off)->secondsSinceMidnight() - Carbon::parse($pause->pause_on)->secondsSinceMidnight();
             }
+
+            if ($snoozequery->exists())
+            {
+                $snoozes = $snoozequery->get();
+                foreach ($snoozes as $snooze)
+                    $snoozeTimeInSec += Carbon::parse($snooze->snooze_off)->secondsSinceMidnight() - Carbon::parse($snooze->snooze_on)->secondsSinceMidnight();
+            }
+
+            $activityTimeInSec = Carbon::parse($shift->time_out)->secondsSinceMidnight() - Carbon::parse($shift->time_in)->secondsSinceMidnight();
+            
+            //Check if the total break time is greater than 30 min.
+            if ($pauseTimeInSec > 1800)
+                $activityTimeInSec -= $pauseTimeInSec;
+
+            // Check if the total snooze time is greater than 30 min.
+            if ($snoozeTimeInSec > 1800)
+                $activityTimeInSec -= $snoozeTimeInSec;
+            
+            array_push($activityTimes, [
+                'user_id' => $shift->user_id,
+                'user_name' => $shift->name,
+                'shift_date' => $shift->the_date,
+                'active_time' => gmdate('H:i:s', $activityTimeInSec) // $activityTimeInSec->format('H:i:s');
+            ]);
         }
 
         $paginatedActivityTimes = $this->paginate($activityTimes);

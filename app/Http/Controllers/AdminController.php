@@ -12,14 +12,14 @@ use Illuminate\Http\RedirectResponse;
 use App\Providers\RouteServiceProvider;
 use Illuminate\View\View;
 
-class RegisterAdminController extends Controller
+class AdminController extends Controller
 {
     /**
      * Display the admin registration view.
      */
     public function create() : View
     {
-        return view('auth.register-admin');
+        return view('admin.register-admin');
     }
 
     /**

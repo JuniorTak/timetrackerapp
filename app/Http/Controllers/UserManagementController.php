@@ -10,14 +10,14 @@ use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
 
-class RegisterUserController extends Controller
+class UserManagementController extends Controller
 {
     /**
      * Display the user registration view.
      */
     public function create() : View
     {
-        return view('auth.register-user');
+        return view('admin.register-user');
     }
 
     /**

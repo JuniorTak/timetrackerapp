@@ -40,7 +40,7 @@
 
                     <x-slot name="content">
                         @if (Auth::user()->is_admin != 0)
-                            <x-dropdown-link :href="route('register-user')">
+                            <x-dropdown-link :href="route('admin.user.create')">
                                 {{ __('Register User') }}
                             </x-dropdown-link>
                         @endif
@@ -97,7 +97,7 @@
 
             <div class="mt-3 space-y-1">
                 @if (Auth::user()->is_admin != 0)
-                    <x-responsive-nav-link :href="route('register-user')">
+                    <x-responsive-nav-link :href="route('admin.user.create')">
                         {{ __('Register User') }}
                     </x-responsive-nav-link>
                 @endif

@@ -42,6 +42,11 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // Prevent non-admin users from deleting their account.
+        if (!auth()->user()->is_admin) {
+            abort(403, 'Unauthorized action.');
+        }
+        
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);

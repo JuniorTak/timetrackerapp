@@ -18,7 +18,7 @@ class CheckNoAdmin
     {
         // Check if there is no admin.
         if (! User::where('is_admin', true)->exists()) {
-            return redirect('/register-admin')->with('info', 'Please register an admin.');
+            return redirect('/admin/register')->with('info', 'Please register an admin.');
         }
         return $next($request);
     }

@@ -1,5 +1,13 @@
 <x-guest-layout>
-    <form method="POST" action="{{ route('register-admin') }}">
+    @if (session('info'))
+        <x-slot name="alert">
+            <div class="px-4 py-2 text-center text-white bg-blue-500">
+                {{ session('info') }}
+            </div>
+        </x-slot>
+    @endif
+
+    <form method="POST" action="{{ route('admin.store') }}">
         @csrf
 
         <!-- Name -->

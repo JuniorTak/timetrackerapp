@@ -4,15 +4,17 @@
             {{ __('New User') }}
         </h2>
     </x-slot>
-
-    @if (session('success'))
-        <div class="px-4 py-2 text-center text-white" style="background: green;">
-            {{ session('success') }}
-        </div>
-    @endif
+    
     <div class="flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
+        @if (session('success'))
+            <div class="w-full sm:max-w-md mt-6 shadow-md overflow-hidden">
+                <div class="px-4 py-2 text-center text-white bg-green-500">
+                    {{ session('success') }}
+                </div>
+            </div>
+        @endif
         <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
-            <form method="POST" action="{{ route('register-user') }}">
+            <form method="POST" action="{{ route('admin.user.store') }}">
                 @csrf
 
                 <!-- Name -->
